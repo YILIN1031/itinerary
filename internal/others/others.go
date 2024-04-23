@@ -1,6 +1,8 @@
 package others
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func UserHelper() {
 	fmt.Printf("itinerary usage:\n")

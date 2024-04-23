@@ -45,9 +45,9 @@ func CSVDataReader(filepath string) []AirportInfo {
 		return nil
 	}
 	// Creating a map relationshop between header text to header index
-	headerMap := make(map[string]int)
+	headerMapping := make(map[string]int)
 	for index, header := range headers {
-		headerMap[strings.TrimSpace(header)] = index
+		headerMapping[strings.TrimSpace(header)] = index
 	}
 
 	var airports []AirportInfo
@@ -62,9 +62,9 @@ func CSVDataReader(filepath string) []AirportInfo {
 			break
 		}
 		airport := AirportInfo{
-			Icao: record[headerMap["icao_code"]],
-			Iata: record[headerMap["iata_code"]],
-			Name: record[headerMap["name"]],
+			Icao: record[headerMapping["icao_code"]],
+			Iata: record[headerMapping["iata_code"]],
+			Name: record[headerMapping["name"]],
 		}
 		airports = append(airports, airport)
 	}
@@ -72,22 +72,40 @@ func CSVDataReader(filepath string) []AirportInfo {
 }
 
 /*
-Mapping ICAO / IATA codes to airport names
+Mapping ICAO / IATA codes to airport names, Some code for testing on here.
+main.go:
+	...
+	codeList := []string{"LAX", "JFK", "ABCD", "CDG", "AGGH", "HIR"}
+	codeToName, err := airport.MappingCodeToAirportName("./airport-lookup.csv")
+	if err != nil {
+		fmt.Println("Error building airport map:", err)
+		os.Exit(1)
+	}
+
+	for _, code := range codeList {
+		if name, ok := codeToName[code]; ok {
+			fmt.Printf("Code: %s, Name: %s.\n", code, name)
+		} else {
+			fmt.Println("No airport found for code:", code)
+		}
+	}
+	...
 */
+
 func MappingCodeToAirportName(filepath string) (map[string]string, error) {
 	airports := CSVDataReader(filepath)
 	if airports == nil {
 		return nil, fmt.Errorf("failed to read airport data")
 	}
 
-	codeMap := make(map[string]string)
+	codeMapping := make(map[string]string)
 	for _, airport := range airports {
 		if airport.Iata != "" {
-			codeMap[airport.Iata] = airport.Name
+			codeMapping[airport.Iata] = airport.Name
 		}
 		if airport.Icao != "" {
-			codeMap[airport.Icao] = airport.Name
+			codeMapping[airport.Icao] = airport.Name
 		}
 	}
-	return codeMap, nil
+	return codeMapping, nil
 }
