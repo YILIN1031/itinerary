@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -108,4 +109,32 @@ func MappingCodeToAirportName(filepath string) (map[string]string, error) {
 		}
 	}
 	return codeMapping, nil
+}
+
+func AirportInfoPrettify(inputContent []byte, airportLookupFilepath string) string {
+	var outputContent string
+
+	// Load the airport code to name mapping
+	codeToName, err := MappingCodeToAirportName(airportLookupFilepath)
+	if err != nil {
+		fmt.Println("Error building airport map:", err)
+		return ""
+	}
+
+	// Regular expression to find airport codes
+	codeRegex := regexp.MustCompile(`#{1,2}[A-Z]{3,4}`) // Assuming all airport codes are 3 or 4 uppercase letters
+
+	// Replace each airport code with its full name
+	outputContent = codeRegex.ReplaceAllStringFunc(string(inputContent), func(code string) string {
+		// Remove all '#' prefixes to correctly lookup the airport name
+		cleanCode := strings.TrimLeft(code, "#")
+
+		// Check if cleanCode exists in the map
+		if name, ok := codeToName[cleanCode]; ok {
+			return name
+		}
+		return code // Return the original code if not found or not matching the pattern
+	})
+
+	return outputContent
 }
