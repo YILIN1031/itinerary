@@ -14,8 +14,14 @@ func main() {
 	help := flag.Bool("h", false, "show the help messsage")
 	flag.Parse()
 
-	if *help || argsCounter != 3 {
-		others.UserHelper()
+	if *help {
+		others.UserHelper("")
+		return
+	}
+
+	if argsCounter != 3 {
+		others.UserHelper("1")
+		return
 	}
 
 	inputFilepath := os.Args[1]
@@ -25,11 +31,21 @@ func main() {
 	// Read the entire input file
 	inputContent, err := os.ReadFile(inputFilepath)
 	if err != nil {
-		fmt.Println("Fail to read the input file:", err)
+		others.UserHelper("2")
 		return
 	}
 
-	outputContent := airport.AirportInfoPrettify(inputContent, airportLookupFilepath)
+	airportLookupFile, err := os.Open(airportLookupFilepath)
+	if err != nil {
+		others.UserHelper("3")
+		return
+	}
+	defer airportLookupFile.Close()
+
+	outputContent, err := airport.AirportInfoPrettify(inputContent, airportLookupFilepath)
+	if err != nil {
+		return
+	}
 
 	// Write the modified content to the output file
 	if err := os.WriteFile(outputFilepath, []byte(outputContent), 0644); err != nil {
