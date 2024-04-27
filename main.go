@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-	argsCounter := len(os.Args) - 1
 	help := flag.Bool("h", false, "show the help messsage")
 	flag.Parse()
 
@@ -19,14 +18,19 @@ func main() {
 		return
 	}
 
-	if argsCounter != 3 {
+	if flag.NArg() == 0 {
+		others.UserHelper("0")
+		return
+	}
+
+	if flag.NArg() != 3 {
 		others.UserHelper("1")
 		return
 	}
 
-	inputFilepath := os.Args[1]
-	outputFilepath := os.Args[2]
-	airportLookupFilepath := os.Args[3]
+	inputFilepath := flag.Arg(0)
+	outputFilepath := flag.Arg(1)
+	airportLookupFilepath := flag.Arg(2)
 
 	// Read the entire input file
 	inputContent, err := os.ReadFile(inputFilepath)

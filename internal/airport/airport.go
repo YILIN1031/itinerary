@@ -95,7 +95,6 @@ func isAirportDataCorrupted(name string) bool {
 
 func AirportInfoPrettify(inputContent []byte, airportLookupFilepath string) (string, error) {
 	var outputContent string
-	var callbackErr error
 
 	codeToName, err := MappingCodeToAirportName(airportLookupFilepath)
 	if err != nil {
@@ -109,19 +108,11 @@ func AirportInfoPrettify(inputContent []byte, airportLookupFilepath string) (str
 		cleanCode := strings.TrimLeft(code, "#")
 
 		name, ok := codeToName[cleanCode]
-		if isAirportDataCorrupted(name) {
-			callbackErr = fmt.Errorf("the code mapping to a corrupted name")
-			others.UserHelper("4")
-			return ""
-		} else if ok {
+		if ok && !isAirportDataCorrupted(name) {
 			return name
 		}
 		return code
 	})
-
-	if callbackErr != nil {
-		return "", callbackErr
-	}
 
 	return outputContent, nil
 }
