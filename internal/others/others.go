@@ -1,7 +1,10 @@
 package others
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
+	"strings"
 )
 
 func UserHelper(option string) {
@@ -20,4 +23,28 @@ func UserHelper(option string) {
 		fmt.Printf("itinerary usage:\n")
 		fmt.Printf("go run . <./input.txt> <./output.txt> <./airport-lookup.csv>\n")
 	}
+}
+
+func WhitespacePrettify(inputContent []byte) string {
+	var result strings.Builder
+	scanner := bufio.NewScanner(bytes.NewReader(inputContent))
+	blankLines := 0
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		trimmedLine := strings.TrimSpace(line)
+		if trimmedLine == "" {
+			blankLines++
+			if blankLines > 1 {
+				continue
+			}
+		} else {
+			blankLines = 0
+		}
+		fields := strings.Fields(trimmedLine)
+		compacted := strings.Join(fields, " ")
+		result.WriteString(compacted + "\n")
+	}
+
+	return result.String()
 }

@@ -46,7 +46,9 @@ func main() {
 	}
 	defer airportLookupFile.Close()
 
-	outputContent, err := airport.AirportInfoPrettify(inputContent, airportLookupFilepath)
+	trimWhitespace := others.WhitespacePrettify(inputContent)
+
+	outputContent, err := airport.AirportInfoPrettify([]byte(trimWhitespace), airportLookupFilepath)
 	if err != nil {
 		return
 	}
@@ -57,6 +59,6 @@ func main() {
 		return
 	}
 
-	fmt.Println("Successful to map codes to airport names and write to output.txt")
+	fmt.Println("Successful")
 
 }
