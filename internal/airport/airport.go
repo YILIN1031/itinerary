@@ -81,19 +81,20 @@ func MappingCodeToAirportName(filepath string) (map[string]string, error) {
 }
 
 func isAirportDataCorrupted(name string) bool {
-	onlyLettersRegex := regexp.MustCompile(`^[A-Za-z\s]+$`)
+	//onlyLettersRegex := regexp.MustCompile(`^[A-Za-z\s]+$`)
 	if strings.TrimSpace(name) == "" {
 		return true
 	}
 	for _, r := range name {
-		if !unicode.IsPrint(r) || !onlyLettersRegex.MatchString(name) {
+		//if !unicode.IsPrint(r) || !onlyLettersRegex.MatchString(name) {
+		if !unicode.IsPrint(r) {
 			return true
 		}
 	}
 	return false
 }
 
-func AirportInfoPrettify(inputContent []byte, airportLookupFilepath string) (string, error) {
+func AirportInfoPrettify(inputContent string, airportLookupFilepath string) (string, error) {
 	var outputContent string
 
 	codeToName, err := MappingCodeToAirportName(airportLookupFilepath)
@@ -104,7 +105,7 @@ func AirportInfoPrettify(inputContent []byte, airportLookupFilepath string) (str
 
 	codeRegex := regexp.MustCompile(`#{1,2}[A-Z]{3,4}`)
 
-	outputContent = codeRegex.ReplaceAllStringFunc(string(inputContent), func(code string) string {
+	outputContent = codeRegex.ReplaceAllStringFunc(inputContent, func(code string) string {
 		cleanCode := strings.TrimLeft(code, "#")
 
 		name, ok := codeToName[cleanCode]

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 
-	"gitea.koodsisu.fi/yilinlai/itinerary/internal/airport"
 	"gitea.koodsisu.fi/yilinlai/itinerary/internal/others"
 	"gitea.koodsisu.fi/yilinlai/itinerary/internal/timedate"
 )
@@ -48,10 +47,14 @@ func main() {
 	}
 	defer airportLookupFile.Close()
 
-	outputContent, err := airport.AirportInfoPrettify([]byte(trimWhitespace), airportLookupFilepath)
-	if err != nil {
-		return
-	}
+	/*
+		outputContent, err := airport.AirportInfoPrettify(trimWhitespace, airportLookupFilepath)
+		if err != nil {
+			return
+		}
+	*/
+
+	outputContent := timedate.TimeDatePrettify(trimWhitespace)
 
 	if err := os.WriteFile(outputFilepath, []byte(outputContent), 0644); err != nil {
 		fmt.Println("Fail to write to the output file:", err)
@@ -60,10 +63,11 @@ func main() {
 
 	fmt.Println("Successful")
 
-	fmt.Printf("Testing for time date codes\n")
-	dateTime := "2024-04-28T21:18-02:00"
-	fmt.Println("Date:", timedate.FormatDate(dateTime))
-	fmt.Println("12-hour Time:", timedate.FormatTime12(dateTime))
-	fmt.Println("24-hour Time:", timedate.FormatTime24(dateTime))
-
+	/*
+		fmt.Printf("Testing for time date codes\n")
+		dateTime := "2024-04-28T21:18-02:00"
+		fmt.Println("Date:", timedate.FormatDate(dateTime))
+		fmt.Println("12-hour Time:", timedate.FormatTime12(dateTime))
+		fmt.Println("24-hour Time:", timedate.FormatTime24(dateTime))
+	*/
 }
