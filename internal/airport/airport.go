@@ -52,6 +52,11 @@ func CSVDataReader(filepath string) []AirportInfo {
 		if err != nil {
 			break
 		}
+		for _, column := range requiredColumns {
+			if strings.TrimSpace(record[headerMapping[column]]) == "" {
+				return nil
+			}
+		}
 		airport := AirportInfo{
 			Icao: record[headerMapping["icao_code"]],
 			Iata: record[headerMapping["iata_code"]],
@@ -82,9 +87,6 @@ func MappingCodeToAirportName(filepath string) (map[string]string, error) {
 
 func isAirportDataCorrupted(name string) bool {
 	//onlyLettersRegex := regexp.MustCompile(`^[A-Za-z\s]+$`)
-	if strings.TrimSpace(name) == "" {
-		return true
-	}
 	for _, r := range name {
 		//if !unicode.IsPrint(r) || !onlyLettersRegex.MatchString(name) {
 		if !unicode.IsPrint(r) {
@@ -100,7 +102,7 @@ func AirportInfoPrettify(inputContent string, airportLookupFilepath string) (str
 	codeToName, err := MappingCodeToAirportName(airportLookupFilepath)
 	if err != nil {
 		others.UserHelper("4")
-		return "", fmt.Errorf("missing data")
+		return "", err
 	}
 
 	codeRegex := regexp.MustCompile(`#{1,2}[A-Z]{3,4}`)
