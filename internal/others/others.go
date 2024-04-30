@@ -26,6 +26,10 @@ func UserHelper(option string) {
 }
 
 func WhitespacePrettify(inputContent []byte) string {
+	inputContent = bytes.ReplaceAll(inputContent, []byte{'\v'}, []byte{'\n'})
+	inputContent = bytes.ReplaceAll(inputContent, []byte{'\f'}, []byte{'\n'})
+	inputContent = bytes.ReplaceAll(inputContent, []byte{'\r'}, []byte{'\n'})
+
 	var result strings.Builder
 	scanner := bufio.NewScanner(bytes.NewReader(inputContent))
 	blankLines := 0
