@@ -25,13 +25,14 @@ func UserHelper(option string) {
 	}
 }
 
-func WhitespacePrettify(inputContent []byte) string {
-	inputContent = bytes.ReplaceAll(inputContent, []byte{'\v'}, []byte{'\n'})
-	inputContent = bytes.ReplaceAll(inputContent, []byte{'\f'}, []byte{'\n'})
-	inputContent = bytes.ReplaceAll(inputContent, []byte{'\r'}, []byte{'\n'})
+func WhitespacePrettify(inputContent string) string {
+	convertedInputContent := strings.ReplaceAll(inputContent, "\\v", "\n")
+	convertedInputContent = strings.ReplaceAll(convertedInputContent, "\\f", "\n")
+	convertedInputContent = strings.ReplaceAll(convertedInputContent, "\\r", "\n")
+	convertedInputContent = strings.ReplaceAll(convertedInputContent, "\\n", "\n")
 
 	var result strings.Builder
-	scanner := bufio.NewScanner(bytes.NewReader(inputContent))
+	scanner := bufio.NewScanner(bytes.NewReader([]byte(convertedInputContent)))
 	blankLines := 0
 
 	for scanner.Scan() {

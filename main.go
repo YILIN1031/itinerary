@@ -39,7 +39,7 @@ func main() {
 		return
 	}
 
-	trimWhitespace := others.WhitespacePrettify(inputContent)
+	trimWhitespace := others.WhitespacePrettify(string(inputContent))
 
 	airportLookupFile, err := os.Open(airportLookupFilepath)
 	if err != nil {
@@ -60,6 +60,6 @@ func main() {
 		return
 	}
 
-	fmt.Println("Successful")
+	fmt.Println("Successful, please check your output.txt now.")
 
 }
