@@ -7,6 +7,7 @@ import (
 	"strings"
 )
 
+// display help information based on different options
 func UserHelper(option string) {
 	switch option {
 	case "0":
@@ -25,19 +26,32 @@ func UserHelper(option string) {
 	}
 }
 
+// process the blank lines and whitespace
 func WhitespacePrettify(inputContent string) string {
+	// "strings" contains functions for manipulating strings.
+	// These functions include searching
+	// and replacing strings, comparing, trimming, splitting,
+	// and joining strings, etc.
+	// For example, you can use strings.
+	// Split to divide a string or strings.
+	// Join to concatenate an array of strings.
 	convertedInputContent := strings.ReplaceAll(inputContent, "\\v", "\n")
 	convertedInputContent = strings.ReplaceAll(convertedInputContent, "\\f", "\n")
 	convertedInputContent = strings.ReplaceAll(convertedInputContent, "\\r", "\n")
 	convertedInputContent = strings.ReplaceAll(convertedInputContent, "\\n", "\n")
 
+	// use strings.Builder to build a string that can be manipulated
 	var result strings.Builder
-	scanner := bufio.NewScanner(bytes.NewReader([]byte(convertedInputContent)))
-	blankLines := 0
 
+	scanner := bufio.NewScanner(bytes.NewReader([]byte(convertedInputContent)))
+
+	// set a blank line counter
+	blankLines := 0
 	for scanner.Scan() {
 		line := scanner.Text()
+		// remove the leading and trailing spaces firstly
 		trimmedLine := strings.TrimSpace(line)
+		// if line is in blank, add 1 to counter
 		if trimmedLine == "" {
 			blankLines++
 			if blankLines > 1 {
@@ -46,6 +60,7 @@ func WhitespacePrettify(inputContent string) string {
 		} else {
 			blankLines = 0
 		}
+		// split and then combine
 		fields := strings.Fields(trimmedLine)
 		compacted := strings.Join(fields, " ")
 		result.WriteString(compacted + "\n")
