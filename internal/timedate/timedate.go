@@ -70,6 +70,16 @@ func TimeDatePrettify(inputContent string) string {
 	// submatches[1]: (D|T(12|24))
 	// submatches[2]: (12|24)
 	// submatches[3]: (.*?)
+	// Note:
+	// Original Pattern (Non-greedy): (D|T(12|24))\((.*?)\)
+	// Here, .*? will match characters as few as possible until it encounters the first right parenthesis ).
+	// It is non-greedy, meaning that the regular expression will match the shortest string that satisfies the condition.
+	// Modified Pattern (Greedy): (D|T(12|24))\((.*)\)
+	// In this modified expression, .* is greedy and will match as many characters as possible until the last ) in the string.
+	// This means that if there are multiple closing right parentheses, .* will match all characters up until the last parenthesis.
+	// Thus, removing the question mark changes the regular expression from matching the minimal necessary characters
+	// to capturing as many characters as possible, which can affect the expected outcome and practical applications,
+	// especially when dealing with long strings containing multiple similar patterns.
 	timeDateRegex := regexp.MustCompile(`(D|T(12|24))\((.*?)\)`)
 
 	// a simple example of closure function

@@ -47,7 +47,7 @@ func main() {
 	airportLookupFilepath := flag.Arg(2) // assign the third argument to airport-lookup.csv filepath
 
 	if inputFilepath == outputFilepath || inputFilepath == airportLookupFilepath || outputFilepath == airportLookupFilepath {
-		fmt.Println("Error: File paths must not be the same.")
+		fmt.Println("Error: File name must not be the same.")
 		return
 	}
 
@@ -118,8 +118,11 @@ func main() {
 	processDateTime := timedate.TimeDatePrettify(processAirportInfo)
 
 	// write all the things to output.txt
-	// File Permission: 0644 -> 0-User-Group-Others -> 0-RWX-RWX-RWX -> 0-110-100-100
 	// R: Read, W: Write, X: eXecute
+	// File Permission: 0644 -> 0-User:RWX-Group:RWX-Others:RWX -> 0-110-100-100
+	// 110: 1*2^2,1*2^1,0*2^0 -> 1*2^2+1*2^1+0*2^0 = 6
+	// 100: 1*2^2,0*2^1,0*2^0 -> 1*2^2+0*2^1+0*2^0 = 4
+	// 100: 1*2^2,0*2^1,0*2^0 -> 1*2^2+0*2^1+0*2^0 = 4
 	if err := os.WriteFile(outputFilepath, []byte(processDateTime), 0644); err != nil {
 		fmt.Println("Fail to write to the output file:", err)
 		return
