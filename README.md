@@ -1,5 +1,5 @@
 # Itinerary Prettifier
-a command line tool, which reads a text-based itinerary from a file (input), processes the text to make it customer-friendly, and writes the result to a new file (output).
+Hello! Here is a command line tool, which reads a text-based itinerary from a file (input), processes the text to make it customer-friendly, and writes the result to a new file (output).
 
 
 
