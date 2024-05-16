@@ -49,6 +49,7 @@ Your flight departs from #HAJ       at D(2022-05-09T08:07Z) ,            T12(202
 
 
 Hope\ryou\vhave\fa\n nice trip!
+See you!
 
 
 
